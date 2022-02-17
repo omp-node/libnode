@@ -26,11 +26,7 @@ env:
 jobs:
   build-windows:
     if: github.event.pull_request.draft == false
-    strategy:
-      matrix:
-        windows: [windows-2019, windows-2022]
-      fail-fast: false
-    runs-on: ${{ matrix.windows }}
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v2
         with:
@@ -41,7 +37,17 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install deps
         run: choco install nasm
-      - name: Environment Information
+      - name: Environment Info
         run: npx envinfo
       - name: Build
-        run: ./vcbuild.bat
+        run: ./vcbuild.bat dll
+      - name: Upload libnode.dll artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libnode.dll
+          path: out/Release/libnode.dll
+      - name: Upload libnode.lib artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libnode.lib
+          path: out/Release/libnode.lib
