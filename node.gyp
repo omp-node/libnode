@@ -233,8 +233,15 @@
         }],
         [ 'node_shared=="true"', {
           'xcode_settings': {
-            'OTHER_LDFLAGS': [ '-Wl,-rpath,@loader_path', ],
+            'OTHER_LDFLAGS': [ '-Wl,-rpath,@loader_path', '-Wl,-rpath,@loader_path/../lib'],
           },
+          'conditions': [
+            ['OS=="linux"', {
+               'ldflags': [
+                 '-Wl,-rpath,\\$$ORIGIN/../lib'
+               ],
+            }],
+          ],
         }],
         [ 'enable_lto=="true"', {
           'xcode_settings': {
@@ -639,6 +646,7 @@
           'libraries': [
             'Dbghelp',
             'Psapi',
+            'Winmm',
             'Ws2_32',
           ],
         }],

@@ -87,7 +87,6 @@
             "<(SHARED_INTERMEDIATE_DIR)/torque-generated/exported-macros-assembler.h",
             "<(SHARED_INTERMEDIATE_DIR)/torque-generated/factory.cc",
             "<(SHARED_INTERMEDIATE_DIR)/torque-generated/factory.inc",
-            "<(SHARED_INTERMEDIATE_DIR)/torque-generated/field-offsets.h",
             "<(SHARED_INTERMEDIATE_DIR)/torque-generated/instance-types.h",
             "<(SHARED_INTERMEDIATE_DIR)/torque-generated/interface-descriptors.inc",
             "<(SHARED_INTERMEDIATE_DIR)/torque-generated/objects-body-descriptors-inl.inc",
