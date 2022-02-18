@@ -1,0 +1,58 @@
+name: build-windows-debug
+
+on:
+  pull_request:
+    paths-ignore:
+      - "README.md"
+      - .github/**
+      - '!.github/workflows/build-windows-debug.yml'
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches:
+      - master
+      - main
+      - canary
+      - v[0-9]+.x-staging
+      - v[0-9]+.x
+    paths-ignore:
+      - "README.md"
+      - .github/**
+      - '!.github/workflows/build-windows-debug.yml'
+
+env:
+  PYTHON_VERSION: '3.10'
+  FLAKY_TESTS: dontcare
+
+jobs:
+  build-windows-debug:
+    if: github.event.pull_request.draft == false
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install deps
+        run: choco install nasm
+      - name: Environment Info
+        run: npx envinfo
+      - name: Build
+        run: ./vcbuild.bat debug dll
+      - name: Upload libnode.dll artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libnode.dll
+          path: out/Debug/libnode.dll
+      - name: Upload libnode.pdb artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libnode.pdb
+          path: out/Debug/libnode.pdb
+      - name: Upload libnode.lib artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libnode.lib
+          path: out/Debug/libnode.lib
