@@ -1,42 +1,19 @@
 name: Build Windows
 
 on:
-  pull_request:
-    paths-ignore:
-      - README.md
-      - .github/**
-      - '!.github/workflows/build-windows.yml'
-    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches:
-      - main
-      - canary
-      - v[0-9]+.x-staging
-      - v[0-9]+.x
+      - "*"
     paths-ignore:
       - README.md
-      - .github/**
-      - '!.github/workflows/build-windows.yml'
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
 
 env:
   PYTHON_VERSION: '3.12'
   FLAKY_TESTS: keep_retrying
 
-permissions:
-  contents: read
-
 jobs:
   build-windows:
-    if: github.event.pull_request.draft == false
-    strategy:
-      matrix:
-        windows: [windows-2019, windows-2022]
-      fail-fast: false
-    runs-on: ${{ matrix.windows }}
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b  # v4.1.4
         with:
@@ -50,4 +27,20 @@ jobs:
       - name: Environment Information
         run: npx envinfo
       - name: Build
-        run: ./vcbuild.bat
+        run: ./vcbuild.bat release dll static x64
+      - name: Copy  and compress files
+        shell: bash
+        run: |
+          mkdir github-release
+          cp out/Release/libnode.dll ./github-release/libnode.dll
+          cp out/Release/libnode.lib ./github-release/libnode.lib
+          powershell -NoLogo -NoProfile -Command Compress-Archive -DestinationPath "Release.zip" -Path "github-release"
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: Release.zip
+          asset_name: Release.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "Automatic release"
