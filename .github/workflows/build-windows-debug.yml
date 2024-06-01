@@ -1,4 +1,4 @@
-name: build-windows
+name: build-windows-debug
 
 on:
   push:
@@ -10,8 +10,7 @@ env:
   FLAKY_TESTS: dontcare
 
 jobs:
-  build-windows:
-    if: github.event.pull_request.draft == false
+  build-windows-debug:
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v2
@@ -26,14 +25,19 @@ jobs:
       - name: Environment Info
         run: npx envinfo
       - name: Build
-        run: ./vcbuild.bat dll
+        run: ./vcbuild.bat debug dll
       - name: Upload libnode.dll artifact
         uses: actions/upload-artifact@v2
         with:
           name: libnode.dll
-          path: out/Release/libnode.dll
+          path: out/Debug/libnode.dll
+      - name: Upload libnode.pdb artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libnode.pdb
+          path: out/Debug/libnode.pdb
       - name: Upload libnode.lib artifact
         uses: actions/upload-artifact@v2
         with:
           name: libnode.lib
-          path: out/Release/libnode.lib
+          path: out/Debug/libnode.lib
