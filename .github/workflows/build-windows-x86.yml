@@ -1,4 +1,4 @@
-name: build-windows
+name: build-windows-x86
 
 on:
   push:
