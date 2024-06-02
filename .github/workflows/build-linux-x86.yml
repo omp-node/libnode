@@ -23,7 +23,11 @@ jobs:
       - name: Environment Info
         run: npx envinfo
       - name: Build
-        run: ./configure --shared --dest-cpu-ia32 && make -j8
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install g++-multilib gcc-multilib libstdc++6:i386 libc6:i386
+          ./configure --shared --dest-cpu=ia32 && make -j8
       - name: Build
         run: |
           cd out/Release
