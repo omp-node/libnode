@@ -1,0 +1,35 @@
+name: build-linux
+
+on:
+  push:
+    branches:
+      - "*"
+
+env:
+  PYTHON_VERSION: '3.10'
+  FLAKY_TESTS: dontcare
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Environment Info
+        run: npx envinfo
+      - name: Build
+        run: ./configure --shared --dest-cpu-ia32 && make -j8
+      - name: Build
+        run: |
+          cd out/Release
+          ls
+      - name: Upload libnode.so.93 artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libnode.so.93
+          path: out/Release/libnode.so.93

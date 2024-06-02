@@ -1,0 +1,39 @@
+name: build-windows
+
+on:
+  push:
+    branches:
+      - "*"
+
+env:
+  PYTHON_VERSION: '3.10'
+  FLAKY_TESTS: dontcare
+
+jobs:
+  build-windows:
+    if: github.event.pull_request.draft == false
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install deps
+        run: choco install nasm
+      - name: Environment Info
+        run: npx envinfo
+      - name: Build
+        run: ./vcbuild.bat dll x86
+      - name: Upload libnode.dll artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libnode.dll
+          path: out/Release/libnode.dll
+      - name: Upload libnode.lib artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: libnode.lib
+          path: out/Release/libnode.lib
