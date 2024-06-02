@@ -1,23 +1,9 @@
 name: build-linux
 
 on:
-  pull_request:
-    paths-ignore:
-      - "README.md"
-      - .github/**
-      - '!.github/workflows/build-linux.yml'
-    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches:
-      - master
-      - main
-      - canary
-      - v[0-9]+.x-staging
-      - v[0-9]+.x
-    paths-ignore:
-      - "README.md"
-      - .github/**
-      - '!.github/workflows/build-linux.yml'
+      - "*"
 
 env:
   PYTHON_VERSION: '3.10'
@@ -25,7 +11,6 @@ env:
 
 jobs:
   build-linux:
-    if: github.event.pull_request.draft == false
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -39,6 +24,10 @@ jobs:
         run: npx envinfo
       - name: Build
         run: ./configure --shared && make -j8
+      - name: Build
+        run: |
+          cd out/Release
+          ls
       - name: Upload libnode.so.93 artifact
         uses: actions/upload-artifact@v2
         with:
