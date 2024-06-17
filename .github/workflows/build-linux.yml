@@ -28,8 +28,8 @@ jobs:
         run: |
           cd out/Release
           ls
-      - name: Upload libnode.so.93 artifact
+      - name: Upload libnode.so.108 artifact
         uses: actions/upload-artifact@v2
         with:
-          name: libnode.so.93
-          path: out/Release/libnode.so.93
+          name: libnode.so.108
+          path: out/Release/libnode.so.108
