@@ -1,4 +1,4 @@
-actions/upload-artifact@v4name: build-linux-x86
+name: build-linux-x86
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
           cd out/Release
           ls
       - name: Upload libnode.so.108 artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: libnode.so.108
           path: out/Release/libnode.so.108
