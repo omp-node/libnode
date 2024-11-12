@@ -1,4 +1,4 @@
-name: build-linux-x86
+actions/upload-artifact@v4name: build-linux-x86
 
 on:
   push:

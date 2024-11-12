@@ -1,4 +1,4 @@
-name: build-windows
+actions/upload-artifact@v4name: build-windows
 
 on:
   push:
