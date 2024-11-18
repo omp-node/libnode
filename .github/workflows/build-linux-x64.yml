@@ -1,4 +1,4 @@
-name: build-windows
+name: build-linux-x64
 
 on:
   push:
@@ -10,9 +10,8 @@ env:
   FLAKY_TESTS: dontcare
 
 jobs:
-  build-windows:
-    if: github.event.pull_request.draft == false
-    runs-on: windows-2019
+  build-linux:
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,19 +20,16 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install deps
-        run: choco install nasm
       - name: Environment Info
         run: npx envinfo
       - name: Build
-        run: ./vcbuild.bat dll
-      - name: Upload libnode.dll artifact
+        run: ./configure --shared && make -j8
+      - name: Build
+        run: |
+          cd out/Release
+          ls
+      - name: Upload libnode.so.108 artifact
         uses: actions/upload-artifact@v4
         with:
-          name: libnode.dll
-          path: out/Release/libnode.dll
-      - name: Upload libnode.lib artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: libnode.lib
-          path: out/Release/libnode.lib
+          name: libnode.so.108
+          path: out/Release/libnode.so.108
