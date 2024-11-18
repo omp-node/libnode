@@ -20,6 +20,7 @@ jobs:
         run: npx envinfo
       - name: Build
         run: |
+          chmod -R 777 ./
           cd docker
           cd ubuntu_18.04-x64
           chmod +x ./build.sh
