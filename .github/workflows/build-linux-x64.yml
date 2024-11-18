@@ -22,6 +22,8 @@ jobs:
         run: |
           cd docker
           cd ubuntu_18.04-x64
+          chmod +x ./build.sh
+          chmod +x ./docker-entrypoint.sh
           ./build.sh
       - name: Upload libnode.so.108 artifact
         uses: actions/upload-artifact@v4
