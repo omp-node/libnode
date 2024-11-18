@@ -112,9 +112,9 @@ class SnapshotFileWriter {
   }
 
   static FILE* GetFileDescriptorOrDie(const char* filename) {
-    FILE* fp = v8::base::OS::FOpen(filename, "wb");
+    FILE* fp = fopen(filename, "wb");
     if (fp == nullptr) {
-      i::PrintF("Unable to open file \"%s\" for writing.\n", filename);
+      i::PrintF("Unable to open file \"%s\" for writing (mksnapshot.cc).\n", filename);
       exit(1);
     }
     return fp;
