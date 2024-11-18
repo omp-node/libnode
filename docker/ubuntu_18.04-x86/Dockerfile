@@ -20,6 +20,7 @@ RUN \
         make \
         python3-pip \
         libz-dev \
+        zlib1g-dev \
     && \
     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 30 && \
     update-alternatives --set cc /usr/bin/gcc && \
