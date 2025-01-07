@@ -5,7 +5,7 @@
 {
   'variables': {
     'ZLIB_ROOT': '.',
-    'use_system_zlib%': 1,
+    'use_system_zlib%': 0,
     'arm_fpu%': '',
     'llvm_version%': '0.0',
   },
